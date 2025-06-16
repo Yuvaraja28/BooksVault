@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | BookVault</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/checkout.css') }}"
+    />
+    {% include 'metadata.html' %}
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <div class="checkout-container">
+      <div class="checkout-form">
+        <h1 class="checkout-title">Checkout</h1>
+        <h2 class="form-title">Billing Address</h2>
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" required />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" required />
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" name="address" required />
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" required />
+        </div>
+        <div class="form-group">
+          <label for="state">State</label>
+          <select id="state" name="state" required>
+            <option value="">Select State</option>
+            <option value="Pondicherry">Pondicherry</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="pinCode">Pin Code</label>
+          <input type="text" id="pinCode" name="pinCode" required />
+        </div>
+        <h2 class="form-title">Payment Information</h2>
+        <div class="form-group">
+          <label for="paymentMethod">Payment Method</label>
+          <select id="paymentMethod" name="paymentMethod" required>
+            <option value="cash">Cash on Delivery</option>
+          </select>
+        </div>
+        <button class="place-order-btn" id="placeOrderBtn">Place Order</button>
+      </div>
+      <div class="cart-preview">
+        <h2 class="cart-preview-title">Order Summary</h2>
+        <ul id="cart-items">
+         <!-- Cart items will be dynamically added here -->
+        </ul>
+        <div class="cart-total">
+          <span>Total:</span>
+          <span id="cart-total">₹{{ total|float }}</span>
+        </div>
+        {% if late_charges > 0 %}
+        <div class="cart-total">
+          <span>Late Charges:</span>
+          <span>₹{{ late_charges|float }}</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+    <script>
+      $(document).ready(function () {
+        let cart = localStorage.getItem("cart");
+        cart = cart ? JSON.parse(cart) : [];
+        let total = 0;
+
+        function displayCartItems() {
+          let cartItemsHTML = "";
+          total = 0;
+          cart.forEach((item) => {
+            cartItemsHTML += `
+              <li class="cart-preview-item">
+                <div class="cart-item-details">
+                  <span class="cart-preview-item-name">${item.name}</span>
+                  <span class="cart-preview-item-quantity">
+                    ${item.quantity} x ₹${item.price}
+                  </span>
+                  <span class="cart-preview-item-type">
+                    ${item.book_status === 'rental' ? '(Rental)' : '(Purchase)'}
+                  </span>
+                  ${item.book_status === 'rental' ? `
+                    <span class="cart-preview-item-rental-dates">
+                      ${item.rental_start_date} - ${item.rental_end_date}
+                    </span>
+                  ` : ''}
+                </div>
+              </li>
+            `;
+            total += item.price * item.quantity;
+          });
+          $("#cart-items").html(cartItemsHTML);
+          $("#cart-total").text("₹" + total.toFixed(2));
+        }
+
+        displayCartItems();
+
+        $(".place-order-btn").on("click", function (event) {
+          event.preventDefault();
+          let isValid = true;
+          $(".checkout-form input[required], .checkout-form select[required]").each(function () {
+            if (!$(this).val()) {
+              isValid = false;
+              $(this).addClass("error");
+            } else {
+              $(this).removeClass("error");
+            }
+          });
+          delete cart['image']
+          let cartItems = JSON.stringify(cart);
+          if (isValid) {
+            $.ajax({
+              url: '/place_order',
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify({
+                firstName: $("#firstName").val(),
+                lastName: $("#lastName").val(),
+                username: "{{ session.username }}",
+                email: "{{ session.email }}",
+                address: $("#address").val(),
+                city: $("#city").val(),
+                state: $("#state").val(),
+                pinCode: $("#pinCode").val(),
+                paymentMethod: $("#paymentMethod").val(),
+                cartItems: cartItems,
+              }),
+              success: function (response) {
+                openModal("Order Placed Successfully!", 'Order');
+                localStorage.removeItem("cart");
+                window.location.href = "/";
+              },
+              error: function (error) {
+                openModal("Error placing order: " + error.responseJSON.message, 'Order');
+              },
+            });
+          } else {
+            openModal("Please fill in all required fields.", 'Order');
+          }
+        });
+      });
+    </script>
+
+    {% if show_login_popup %}
+    <script>
+      $(document).ready(function() {
+        $(".login-form-container").addClass("active");
+      });
+    </script>
+    {% endif %}
+    {% include 'modal.html' %}
+  </body>
+</html>

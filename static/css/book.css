@@ -1,0 +1,316 @@
+/* Basic Styling */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.book-container {
+  position: relative;
+  width: 65%;
+}
+
+.book-container img {
+  width: 100%;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 15px;
+  display: flex;
+  gap: 20px;
+  position: relative;
+}
+
+.right-column {
+  margin-top: 60px;
+}
+
+/* Left Column */
+.left-column img {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.left-column img.active {
+  opacity: 1;
+}
+
+
+/* Right Column */
+
+/* Book Description */
+.book-description {
+  position: relative;
+  border-bottom: 1px solid #E1E8EE;
+  margin-bottom: 20px;
+}
+.book-description span {
+  font-size: 12px;
+  color: #007bff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.book-description h1 {
+  font-weight: 300;
+  font-size: 52px;
+  color: #43484D;
+  letter-spacing: -2px;
+}
+.book-description p {
+  font-size: 16px;
+  font-weight: 300;
+  color: #86939E;
+  line-height: 24px;
+}
+
+/* Book Configuration */
+.book-color span,
+.cable-config span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #86939E;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+/* Book Color */
+.book-color {
+  margin-bottom: 30px;
+}
+
+.color-choose div {
+  display: inline-block;
+}
+
+.color-choose input[type="radio"] {
+  display: none;
+}
+
+.color-choose input[type="radio"] + label span {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin: -1px 4px 0 0;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.color-choose input[type="radio"] + label span {
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.33);
+}
+
+.color-choose input[type="radio"]#red + label span {
+  background-color: #C91524;
+}
+.color-choose input[type="radio"]#blue + label span {
+  background-color: #007bff;
+}
+.color-choose input[type="radio"]#black + label span {
+  background-color: #323232;
+}
+
+.color-choose input[type="radio"]:checked + label span {
+  background-image: url(images/check-icn.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Cable Configuration */
+.cable-choose {
+  margin-bottom: 20px;
+}
+
+.cable-choose button {
+  border: 2px solid #E1E8EE;
+  border-radius: 6px;
+  padding: 13px 20px;
+  font-size: 14px;
+  color: #5E6977;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all .5s;
+}
+
+.cable-choose button:hover,
+.cable-choose button:active,
+.cable-choose button:focus {
+  border: 2px solid #86939E;
+  outline: none;
+}
+
+.cable-config {
+  border-bottom: 1px solid #E1E8EE;
+  margin-bottom: 20px;
+}
+
+.cable-config a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 12px;
+  position: relative;
+  margin: 10px 0;
+  display: inline-block;
+}
+.cable-config a:before {
+  content: "?";
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border: 2px solid rgba(53, 142, 215, 0.5);
+  display: inline-block;
+  text-align: center;
+  line-height: 16px;
+  opacity: 0.5;
+  margin-right: 5px;
+}
+
+/* Book Price */
+.book-price {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.book-price span {
+  font-size: 26px;
+  font-weight: 300;
+  color: #43474D;
+  margin-right: 20px;
+}
+
+/* Purchase Options */
+.purchase-options {
+  display: flex;
+  gap: 20px;
+}
+
+.purchase-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  color: #555;
+  cursor: pointer;
+}
+
+.purchase-options input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #999;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+}
+
+.purchase-options input[type="radio"]:checked {
+  border-color: #007bff;
+  background-color: #007bff;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3C/svg%3E");
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Rental Dates */
+.rental-dates {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rental-dates label {
+  font-size: 16px;
+  color: #555;
+}
+
+.rental-dates input[type="date"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #555;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cart-btn {
+  display: inline-block;
+  background-color: #007bff;
+  border-radius: 6px;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 15px 35px;
+  transition: all .3s ease;
+  width: fit-content;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  outline: none;
+}
+
+.cart-btn:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.rent-btn {
+  display: inline-block;
+  background-color: #28a745;
+  border-radius: 6px;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 15px 35px;
+  transition: all .3s ease;
+  width: fit-content;
+  cursor: pointer;
+  margin-left: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  outline: none;
+}
+
+.rent-btn:hover {
+  background-color: #218838;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 940px) {
+  .container {
+    flex-direction: column;
+    margin-top: 60px;
+  }
+
+  .left-column,
+  .right-column {
+    width: 100%;
+  }
+
+  .left-column img {
+    width: 300px;
+    right: 0;
+    top: -65px;
+    left: initial;
+  }
+}
+
+@media (max-width: 535px) {
+  .left-column img {
+    width: 220px;
+    top: -85px;
+  }
+}

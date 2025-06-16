@@ -1,0 +1,15 @@
+<!-- The Modal -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+      <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2 id="modal-title">Alert</h2>
+      </div>
+      <div class="modal-body">
+          <p id="modal-message">Some text in the Modal Body</p>
+      </div>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>

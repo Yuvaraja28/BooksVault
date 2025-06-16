@@ -1,0 +1,356 @@
+<header class="header">
+  <div class="header-1">
+    <a href="/" class="logo"> <i class="fas fa-book"></i> BookVault </a>
+
+    <form action="" class="search-form">
+      <input
+        type="search"
+        name=""
+        placeholder="search here..."
+        id="search-box"
+      />
+      <label for="search-box" class="fas fa-search"></label>
+    </form>
+
+    <div class="icons">
+      <div id="search-btn" class="fas fa-search"></div>
+      <a href="/cart" class="fas fa-shopping-cart">
+        <span id="cart-count">0</span>
+      </a>
+      {% if session.user_id %}
+      <div class="profile-container">
+        <a class="fas fa-user" id="profile-link"></a>
+        <div class="profile-tooltip">Logged in as {{ session.username }}<br><a class="logout" href="/logout" style="text-decoration: underline; color: rgb(174, 174, 238) !important;">Logout</a>
+        </div>
+      </div>
+      {% else %}
+      <div id="login-btn" class="fas fa-user"></div>
+      {% endif %}
+    </div>
+
+    <style>
+      .icons {
+        user-select: none;
+      }
+
+      .profile-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .profile-tooltip {
+        visibility: hidden;
+        width: 150px;
+        background-color: #343a40;
+        /* Dark background */
+        text-align: center;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        top: 125%;
+        right: -175%;
+        margin-left: -65px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        color: #fff !important;
+        font-size: 16px !important;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* Modern font */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        /* Subtle shadow */
+      }
+
+      .profile-tooltip .logout {
+        color: #fff !important;
+        font-size: 16px !important;
+      }
+
+      /* Add arrow to the tooltip */
+      .profile-tooltip::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent #343a40 transparent;
+      }
+
+      .profile-container:hover .profile-tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+  </div>
+
+  <div class="header-2">
+    <nav class="navbar">
+      <a href="/">home</a>
+      <a href="/#featured">featured</a>
+      <a href="/#category">category</a>
+      <a href="/#reviews">reviews</a>
+      <a href="/feedback">feedback</a>
+    </nav>
+  </div>
+</header>
+
+<!-- bottom navbar  -->
+
+<nav class="bottom-navbar">
+  <a href="/" class="fas fa-home"></a>
+  <a href="/#featured" class="fas fa-list"></a>
+  <a href="/#category" class="fas fa-tags"></a>
+  <a href="/#reviews" class="fas fa-comments"></a>
+  <a href="/feedback" class="fas fa-feedback"></a>
+</nav>
+
+<!-- login form  -->
+
+<div class="login-form-container">
+  <div id="close-login-btn" class="fas fa-times"{% if show_login_popup %} style="display: none;"{% endif %}></div>
+
+  <div class="login-register-form">
+    <div class="form-toggle">
+      <button id="login-toggle" class="active">Login</button>
+      <button id="register-toggle">Register</button>
+    </div>
+
+    <form id="login-form" onsubmit="login(event)">
+      <h3>Sign In</h3>
+      <input type="hidden" name="action" value="login" />
+      <span>Username</span>
+      <input
+        type="text"
+        name="username"
+        class="box"
+        placeholder="Enter your username"
+        required
+      />
+      <span>Password</span>
+      <input
+        type="password"
+        name="password"
+        class="box"
+        placeholder="Enter your password"
+        required
+      />
+      <div class="checkbox">
+        <input type="checkbox" id="remember-me" />
+        <label for="remember-me">Remember me</label>
+      </div>
+      <input
+        type="submit"
+        value="Sign In"
+        class="btn"
+        style="background-color: var(--blue)"
+      />
+      <!-- <p>Forget password? <a href="#">Click here</a></p> -->
+      <p>
+        Don't have an account?
+        <button type="button" id="register-link">Create one</button>
+      </p>
+    </form>
+
+    <form action="/auth" method="post" id="register-form">
+      <h3>Register</h3>
+      <input type="hidden" name="action" value="register" />
+      <span>Username</span>
+      <input
+        type="text"
+        name="username"
+        class="box"
+        placeholder="Enter your username"
+        required
+      />
+      <span>Email</span>
+      <input
+        type="email"
+        name="email"
+        class="box"
+        placeholder="Enter your email"
+        required
+      />
+      <span>Password</span>
+      <input
+        type="password"
+        name="password"
+        class="box"
+        placeholder="Enter your password"
+        required
+      />
+      <input
+        type="submit"
+        value="Register"
+        class="btn"
+        style="background-color: var(--blue)"
+      />
+      <p>
+        Already have an account?
+        <button type="button" id="login-link">Sign in</button>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const loginFormElement = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+        const loginToggle = document.getElementById("login-toggle");
+        const registerToggle = document.getElementById("register-toggle");
+        const registerLink = document.getElementById("register-link");
+        const loginLink = document.getElementById("login-link");
+        const profileLink = document.getElementById("profile-link");
+        const profileTooltip = document.querySelector(".profile-tooltip");
+
+        registerForm.style.display = "none";
+
+        loginToggle.addEventListener("click", function () {
+            loginFormElement.style.display = "block";
+            registerForm.style.display = "none";
+            loginToggle.classList.add("active");
+            registerToggle.classList.remove("active");
+        });
+
+        registerToggle.addEventListener("click", function () {
+            loginFormElement.style.display = "none";
+            registerForm.style.display = "block";
+            registerToggle.classList.add("active");
+            loginToggle.classList.remove("active");
+        });
+
+        registerLink.addEventListener("click", function () {
+            loginFormElement.style.display = "none";
+            registerForm.style.display = "block";
+            registerToggle.classList.add("active");
+            loginToggle.classList.remove("active");
+        });
+
+        loginLink.addEventListener("click", function () {
+            loginFormElement.style.display = "block";
+            registerForm.style.display = "none";
+            loginToggle.classList.add("active");
+            registerToggle.classList.remove("active");
+        });
+
+        // Profile popup functions
+        function openProfilePopup() {
+            profileTooltip.style.visibility = "visible";
+            profileTooltip.style.opacity = "1";
+        }
+
+        function closeProfilePopup() {
+            profileTooltip.style.visibility = "hidden";
+            profileTooltip.style.opacity = "0";
+        }
+
+        function toggleProfilePopup() {
+            if (profileTooltip.style.visibility === "visible") {
+                closeProfilePopup();
+            } else {
+                openProfilePopup();
+            }
+        }
+
+        // Add event listener to profile link
+        if (profileLink != null) {
+          profileLink?.addEventListener("click", function (event) {
+            event.preventDefault();
+            toggleProfilePopup();
+          });
+        }
+
+        // Close the profile popup when clicking outside
+        document.addEventListener("click", function (event) {
+            // Get the current page URL
+            const currentPage = window.location.pathname;
+
+            // Check if the current page is checkout
+            if (currentPage !== '/checkout') {
+                // Only close the popup if not on the checkout page
+                if (!profileLink.contains(event.target) && !profileTooltip.contains(event.target) && !document.querySelector(".login-form-container").contains(event.target)) {
+                    closeProfilePopup();
+                    document.querySelector(".login-form-container").classList.remove("active");
+                }
+            } else {
+              if (!profileLink.contains(event.target) && !profileTooltip.contains(event.target) && !document.querySelector(".login-form-container").contains(event.target)) {
+                    closeProfilePopup();
+                }
+            }
+        });
+    });
+
+    async function login(event) {
+      event.preventDefault();
+      console.log(event)
+      const form = document.getElementById('login-form');
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch('/auth', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          window.location.href = response.url;
+        } else {
+          const data = await response.json();
+          console.log(data)
+          openModal(data?.error || 'Login failed. Please try again.');
+        }
+      } catch (error) {
+        openModal('Login failed. Please try again.', 'Login');
+      }
+    }
+</script>
+<style>
+  .login-register-form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .form-toggle {
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: auto;
+  }
+
+  .form-toggle button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #eee;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .form-toggle button.active {
+    background-color: var(--blue);
+    color: #fff;
+  }
+
+  .form-toggle button:not(.active):hover {
+    background-color: #ddd;
+  }
+
+  #login-form,
+  #register-form {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  #login-form h3,
+  #register-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+</style>

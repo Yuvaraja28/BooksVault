@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+            color: black;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #007bff;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            width: calc(33.33% - 20px);
+            min-width: 300px;
+            transition: transform 0.3s ease-in-out;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #007bff;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .card p {
+            margin: 5px 0;
+            color: black;
+        }
+
+        .card strong {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+        }
+
+        ul li strong {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+
+        <h2>Rental Orders</h2>
+        <div class="card-container">
+            {% for order in rental_orders %}
+            <div class="card">
+                <h3>Order ID: {{ order.id }}</h3>
+                <p><strong>First Name:</strong> {{ order.firstName }}</p>
+                <p><strong>Last Name:</strong> {{ order.lastName }}</p>
+                <p><strong>Username:</strong> {{ order.username }}</p>
+                <p><strong>Email:</strong> {{ order.email }}</p>
+                <p><strong>Address:</strong> {{ order.address }}</p>
+                <p><strong>City:</strong> {{ order.city }}</p>
+                <p><strong>State:</strong> {{ order.state }}</p>
+                <p><strong>Pin Code:</strong> {{ order.pinCode }}</p>
+                <p><strong>Payment Method:</strong> {{ order.paymentMethod }}</p>
+                <p><strong>Book Status:</strong> {{ order.book_status }}</p>
+                <p><strong>Rental Start Date:</strong> {{ order.rental_start_date }}</p>
+                <p><strong>Rental End Date:</strong> {{ order.rental_end_date }}</p>
+                <p>
+                    <strong>Cart Items:</strong>
+                    {% if order.cartItems %}
+                    <ul>
+                        {% for key, value in order.cartItems.items() %}
+                        <li><strong>{{ key }}:</strong> {{ value }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    No items in cart
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h2>Purchase Orders</h2>
+        <div class="card-container">
+            {% for order in purchase_orders %}
+            <div class="card">
+                <h3>Order ID: {{ order.id }}</h3>
+                <p><strong>First Name:</strong> {{ order.firstName }}</p>
+                <p><strong>Last Name:</strong> {{ order.lastName }}</p>
+                <p><strong>Username:</strong> {{ order.username }}</p>
+                <p><strong>Email:</strong> {{ order.email }}</p>
+                <p><strong>Address:</strong> {{ order.address }}</p>
+                <p><strong>City:</strong> {{ order.city }}</p>
+                <p><strong>State:</strong> {{ order.state }}</p>
+                <p><strong>Pin Code:</strong> {{ order.pinCode }}</p>
+                <p><strong>Payment Method:</strong> {{ order.paymentMethod }}</p>
+                <p><strong>Book Status:</strong> {{ order.book_status }}</p>
+                <p>
+                    <strong>Cart Items:</strong>
+                    {% if order.cartItems %}
+                    <ul>
+                        {% for key, value in order.cartItems.items() %}
+                        <li><strong>{{ key }}:</strong> {{ value }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    No items in cart
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

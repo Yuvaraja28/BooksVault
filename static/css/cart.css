@@ -1,0 +1,148 @@
+.cart-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-title {
+  text-align: center;
+  color: #007bff;
+  margin-bottom: 20px;
+  font-size: 1.6em;
+}
+
+.cart-items {
+  list-style: none;
+  padding: 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-image {
+  width: 80px;
+  margin-right: 10px;
+}
+
+.cart-item-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+}
+
+.cart-item-title {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.cart-item-price {
+  color: #777;
+}
+
+.cart-item-condition {
+  background-color: #007bff;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 0.8em;
+  margin-left: 5px;
+}
+
+.cart-item-quantity {
+  display: flex;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.quantity-btn {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.quantity-input {
+  width: 50px;
+  padding: 5px;
+  text-align: center;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.remove-item {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.remove-item:hover {
+  background-color: #c82333;
+}
+
+.cart-summary {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.cart-summary-title {
+  font-size: 1.9em;
+  margin-bottom: 10px;
+}
+
+.cart-summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.cart-summary-total {
+  font-size: 1.6em;
+  font-weight: bold;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.cart-buttons {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.checkout-btn,
+.clear-cart-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.4em;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.checkout-btn:hover,
+.clear-cart-btn:hover {
+  background-color: #0056b3;
+}

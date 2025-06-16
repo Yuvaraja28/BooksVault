@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart | BookVault</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/cart.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@7/swiper-bundle.min.css"
+    />
+
+    {% include 'metadata.html' %}
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <div class="cart-container">
+      <h1 class="cart-title">Shopping Cart</h1>
+      <div class="cart-items">
+        <ul id="cart-items-list">
+          <!-- Cart items will be dynamically added here -->
+        </ul>
+      </div>
+      <div class="cart-summary">
+        <h2 class="cart-summary-title">Order Summary</h2>
+        <div class="cart-summary-item">
+          <span>Subtotal</span>
+          <span id="cart-subtotal">₹0.00</span>
+        </div>
+        <div class="cart-summary-item">
+          <span>Shipping</span>
+          <span>₹0.00</span>
+        </div>
+        <div class="cart-summary-item">
+          <span>Tax</span>
+          <span>₹0.00</span>
+        </div>
+        <div class="cart-summary-total">
+          <span>Total</span>
+          <span id="cart-total">₹0.00</span>
+        </div>
+        <div class="cart-buttons">
+          <button class="clear-cart-btn" id="clear-cart">Clear Cart</button>
+          <a href="{{ url_for('checkout') }}" class="checkout-btn">Proceed to Checkout</a>
+        </div>
+      </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+    <script>
+      $(document).ready(function () {
+        let cart = localStorage.getItem("cart");
+        cart = cart ? JSON.parse(cart) : [];
+        const cartItemsList = $("#cart-items-list");
+        let subtotal = 0;
+        function updateCartDisplay(cart) {
+          let cartItemsHTML = "";
+          subtotal = 0;
+          cart.forEach((item) => {
+            cartItemsHTML += `
+              <li class="cart-item">
+                <div class="cart-item-image">
+                  <img src="/static/image/books/${item.image}" alt="${item.name}" />
+                </div>
+                <div class="cart-item-details">
+                  <h3 class="cart-item-title">${item.name}</h3>
+                  <span class="cart-item-price">₹${item.price}</span>
+                  <span class="cart-item-condition">${(item.book_status == 'rental') ? 'Rental' : (item.book_status == 'second') ? 'Second Hand' : 'New Book'}</span>
+                  ${item.book_status === 'rental' ? `
+                    <br>
+                    <span class="cart-item-rental-dates">
+                      Rental Dates: ${item.rental_start_date} - ${item.rental_end_date}
+                    </span>
+                  ` : ''}
+                  <div class="cart-item-quantity">
+                    <button class="quantity-btn quantity-decrease" data-name="${item.name}" ${item.book_status === 'rental' ? 'disabled' : ''}>-</button>
+                    <input disabled type="number" class="quantity-input" value="${item.quantity}" min="1" data-name="${item.name}" />
+                    <button class="quantity-btn quantity-increase" data-name="${item.name}" ${item.book_status === 'rental' ? 'disabled' : ''}>+</button>
+                  </div>
+                </div>
+                <button class="remove-item" data-name="${item.name}">Remove</button>
+              </li>
+            `;
+            subtotal += item.price * item.quantity;
+          });
+          cartItemsList.html(cartItemsHTML);
+          $("#cart-subtotal").text("₹" + subtotal.toFixed(2));
+          $("#cart-total").text("₹" + subtotal.toFixed(2));
+        }
+        updateCartDisplay(cart);
+        // Quantity change
+        cartItemsList.off("click", ".quantity-decrease");
+        cartItemsList.off("click", ".quantity-increase");
+        cartItemsList.on("click", ".quantity-decrease", function () {
+          const name = $(this).data("name");
+          const itemIndex = cart.findIndex((item) => item.name === name);
+          if (cart[itemIndex].quantity > 1) {
+            cart[itemIndex].quantity--;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartDisplay(cart);
+            updateCartCount();
+          }
+        });
+        cartItemsList.on("click", ".quantity-increase", function () {
+          const name = $(this).data("name");
+          const itemIndex = cart.findIndex((item) => item.name === name);
+          cart[itemIndex].quantity++;
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartDisplay(cart);
+          updateCartCount();
+        });
+        // Remove item
+        cartItemsList.on("click", ".remove-item", function () {
+          const name = $(this).data("name");
+          cart = cart.filter((item) => item.name !== name);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartDisplay(cart);
+          updateCartCount();
+        });
+        // Clear cart
+        $(".clear-cart-btn").on("click", function () {
+          localStorage.removeItem("cart");
+          cart = [];
+          updateCartDisplay(cart);
+          updateCartCount();
+        });
+      });
+    </script>
+    {% include 'modal.html' %}
+  </body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVault</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% include 'metadata.html' %}
+</head>
+
+<body>
+
+    <!-- header section starts  -->
+    {% include 'header.html' %}
+    <!-- header section ends -->
+
+    <!-- home section starts  -->
+
+    <section class="home" id="home">
+
+        <div class="row">
+
+            <div class="content">
+                <h3>upto 75% off</h3>
+                <p>If you’re an Arts student and need a books, BookVault has great deals on a wide range of
+                    books. Shop for these books from top authors and avail hugely discounted prices</p>
+                <a href="#category" class="btn">shop now</a>
+            </div>
+
+            <div class="swiper books-slider">
+                <div class="swiper-wrapper">
+                    {% for book in books[:5] %}
+                    <a href="#" class="swiper-slide"><img
+                            src="{{ url_for('static', filename='image/books/' + book.image) }}"
+                            alt="{{ book.title }}"></a>
+                    {% endfor %}
+                </div>
+                <img src="{{ url_for('static', filename='image/stand.png') }}" class="stand" alt="">
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- home section ense  -->
+
+    <!-- icons section starts  -->
+
+    <section class="icons-container">
+
+        <div class="icons">
+            <i class="fas fa-shipping-fast"></i>
+            <div class="content">
+                <h3>free shipping</h3>
+                <p>order over ₹500</p>
+            </div>
+        </div>
+
+        <div class="icons">
+            <i class="fas fa-lock"></i>
+            <div class="content">
+                <h3>secure payment</h3>
+                <p>100 secure payment</p>
+            </div>
+        </div>
+
+        <div class="icons">
+            <i class="fas fa-redo-alt"></i>
+            <div class="content">
+                <h3>easy returns</h3>
+                <p>10 days returns</p>
+            </div>
+        </div>
+
+        <div class="icons">
+            <i class="fas fa-headset"></i>
+            <div class="content">
+                <h3>24/7 support</h3>
+                <p>call us anytime</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- icons section ends -->
+
+    <!-- featured section starts  -->
+
+    <section class="featured" id="featured">
+
+        <h1 class="heading"> <span>featured books</span> </h1>
+
+        <div class="swiper featured-slider">
+
+            <div class="swiper-wrapper">
+
+                {% for book in books %}
+                <div class="swiper-slide box">
+                    <div class="image">
+                        <a href="{{ url_for('book', book_id=book.id) }}"> <img
+                                src="{{ url_for('static', filename='image/books/' + book.image) }}" alt=""> </a>
+                    </div>
+                    <div class="content">
+                        {% if book.bookStatus == 'rental' %}
+                        <span class="badge new-book">Rental Book</span>
+                        {% elif book.bookStatus == 'new' %}
+                        <span class="badge new-book">New Book</span>
+                        {% elif book.bookStatus == 'second' %}
+                        <span class="badge old-book">Second Hand</span>
+                        {% else %}
+                        <span class="badge old-book">Unknown</span>
+                        {% endif %}
+                        <h3>{{ book.title }}</h3>
+                        <div class="price">₹{{ book.price }} <span>₹{{ book.original_price }}</span></div>
+                        <a href="{{ url_for('book', book_id=book.id) }}" class="btn">view book</a>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+
+        </div>
+
+    </section>
+
+    <!-- featured section ends -->
+
+    <!-- newsletter section starts -->
+
+    <section class="newsletter">
+
+        <form>
+            <h3>subscribe for latest updates</h3>
+            <input type="email" name="" placeholder="enter your email" id="" class="box">
+            <input type="button" value="subscribe" class="btn">
+        </form>
+
+    </section>
+
+    <!-- newsletter section ends -->
+
+    <!-- category section starts  -->
+
+    <section class="arrivals" id="category">
+
+        <h1 class="heading"> <span>Category</span> </h1>
+        <div class="swiper arrivals-slider">
+
+            <div class="swiper-wrapper">
+
+                <a href="/books/new" class="swiper-slide box" style="background-color: #007bff27; border-radius: 10px;">
+                    <div class="image">
+                        <img src="{{ url_for('static', filename='image/books/c-programming-language.jpg') }}" alt="">
+                    </div>
+                    <div class="content">
+                        <h3>New Books</h3>
+                        <p>Explore our newest arrivals and discover fresh perspectives.</p>
+                    </div>
+                </a>
+
+                <a href="/books/second" class="swiper-slide box" style="background-color: #007bff27; border-radius: 10px;">
+                    <div class="image">
+                        <img src="{{ url_for('static', filename='image/books/data-structures.jpg') }}" alt="">
+                    </div>
+                    <div class="content">
+                        <h3>Second Hand Books</h3>
+                        <p>Find quality used books at affordable prices.</p>
+                    </div>
+                </a>
+
+                <a href="/books/rental" class="swiper-slide box" style="background-color: #007bff27; border-radius: 10px;">
+                    <div class="image">
+                        <img src="{{ url_for('static', filename='image/books/digital-electronics.jpg') }}" alt="">
+                    </div>
+                    <div class="content">
+                        <h3>Rental Books</h3>
+                        <p>Rent your favorite books and save money.</p>
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- category section ends -->
+
+    <!-- deal section starts  -->
+
+    <section class="deal">
+
+        <div class="content">
+            <h3>deal of the day</h3>
+            <h1>upto 50% off</h1>
+            <p>Checkout before this deal expires at midnight.</p>
+            <a href="#category" class="btn">shop now</a>
+        </div>
+
+        <div class="image">
+            <img src="{{ url_for('static', filename='image/deal-img.jpg') }}" alt="">
+        </div>
+
+    </section>
+
+    <!-- deal section ends -->
+
+    <!-- reviews section starts  -->
+
+    <section class="reviews" id="reviews">
+
+        <h1 class="heading"> <span>client's reviews</span> </h1>
+
+        <div class="swiper reviews-slider">
+
+            <div class="swiper-wrapper">
+
+                {% for review in reviews %}
+                <div class="swiper-slide box">
+                    <img src="{{ url_for('static', filename='image/reviews/' + review.image) }}" alt="">
+                    <h3>{{ review.name }}</h3>
+                    <p>{{ review.review }}</p>
+                    <div class="stars">
+                        {% for i in range(review.stars) %}
+                        <i class="fas fa-star"></i>
+                        {% endfor %}
+                        {% if review.stars % 1 != 0 %}
+                        <i class="fas fa-star-half-alt"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- reviews section ends -->
+
+    <!-- feedback section starts  -->
+
+    <section class="blogs" id="blogs">
+
+        <h1 class="heading"> <span>feedback</span> </h1>
+
+        <section class="newsletter">
+
+            <form action="">
+                <h3>give your feedback here...</h3>
+                <a href="{{ url_for('feedback') }}" class="btn">Feedback</a>
+                <!-- <a href="./feedback.html"><input type="submit" value="feedback"> -->
+                </a>
+            </form>
+
+        </section>
+    </section>
+
+    <!-- feedback section ends -->
+
+    <!-- footer section starts  -->
+    {% include 'footer.html' %}
+    <!-- footer section ends -->
+
+    <!-- loader  -->
+
+    <div class="loader-container">
+        <img src="{{ url_for('static', filename='image/loader-img.gif') }}" alt="">
+    </div>
+
+
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+    <!-- custom js file link  -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+</body>
+
+</html>

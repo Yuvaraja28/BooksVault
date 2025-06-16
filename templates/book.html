@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ book.title }} | BookVault</title>
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@7/swiper-bundle.min.css"
+    />
+
+    <!-- font awesome cdn link  -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+    <!-- custom css file link  -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/book.css') }}"
+    />
+
+    {% include 'metadata.html' %}
+    <style>
+      .purchase-options {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- header section starts  -->
+    {% include 'header.html' %}
+    <!-- header section ends -->
+
+    <main class="container">
+      <div class="book-container">
+        <img
+          data-image="red"
+          class="active"
+          src="{{ url_for('static', filename='image/books/' + book.image) }}"
+          alt="{{ book.title }}"
+        />
+
+        <!-- Left Column / Headphones Image -->
+        {% if book.bookStatus == 'rental' %}
+        <span class="badge new-book">Rental Book</span>
+        {% elif book.bookStatus == 'new' %}
+        <span class="badge new-book">New Book</span>
+        {% elif book.bookStatus == 'second' %}
+        <span class="badge old-book">Second Hand</span>
+        {% else %}
+        <span class="badge old-book">Unknown</span>
+        {% endif %}
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-column">
+        <!-- Book Description -->
+        <div class="book-description">
+          <span>Books</span>
+          <h1>{{ book.title }}</h1>
+          <p>{{ book.description }}</p>
+        </div>
+
+        <!-- Book Configuration -->
+        <div class="book-configuration"></div>
+
+        <!-- Book Pricing -->
+        <div class="book-price">
+          <div class="purchase-options">
+            <label>
+              Purchase: ₹{{ book.price }}
+            </label>
+            {% if book.bookStatus == 'rental' %}
+            <label>
+              Rent: ₹{{ rentalPrice }}/month
+            </label>
+            {% endif %}
+          </div>
+          {% if book.bookStatus == 'rental' %}
+          <div class="rental-dates">
+            <div>
+              <label for="rental_start_date">Rental Start Date:</label>
+              <input type="date" id="rental_start_date" name="rental_start_date">  
+            </div>
+            <div>
+              <label for="rental_end_date">Rental End Date:</label>
+              <input type="date" id="rental_end_date" name="rental_end_date">
+            </div>
+          </div>
+          <p id="rentalDisclaimer" style="font-size: 1.6rem; color: grey;">
+            Disclaimer: While purchasing the Rental book, the full book  cost must be paid. When returning the book after the rental date, you can get a refund of the amount deducting the book rental fee for how long the customer held the book. Additionally, a fine of ₹5 per day will be charged if the book is returned after the rental end date.
+          </p>
+          {% endif %}
+          <p style="font-size: 1.5rem; color: grey;">
+            Book Conditions: {{ bookCondition }}% Good
+          </p>
+          <button
+            class="cart-btn"
+            data-name="{{ book.title }}"
+            data-price="{{ book.price }}"
+            data-image="{{ book.image }}"
+            data-book_status="{{ book.bookStatus }}"
+          >
+            {% if book.bookStatus == 'rental' %}
+              Rent It
+            {% else %}
+              Add to cart
+            {% endif %}
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const purchaseRadio = document.getElementById('purchase');
+      const rentRadio = document.getElementById('rent');
+      const cartBtn = document.querySelector('.cart-btn');
+      const rentalDates = document.querySelector('.rental-dates');
+      const rentalDisclaimer = document.getElementById('rentalDisclaimer');
+
+      // Set the minimum date for the rental start date input field
+      const rentalStartDateInput = document.getElementById('rental_start_date');
+      const today = new Date().toISOString().split('T')[0];
+      rentalStartDateInput.setAttribute('min', today);
+      const rentalEndDateInput = document.getElementById('rental_end_date');
+      rentalEndDateInput.setAttribute('min', today);
+    </script>
+
+    <!-- footer section starts  -->
+    {% include 'footer.html' %}
+    <!-- footer section ends -->
+
+    <!-- Scripts -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+      charset="utf-8"
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/script.js') }}"
+      charset="utf-8"
+    ></script>
+    <script src="{{ url_for('static', filename='js/book.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+    {% include 'modal.html' %}
+  </body>
+</html>

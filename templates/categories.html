@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category }} Books | BookVault</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% include 'metadata.html' %}
+    
+    <style>
+        .books h1 {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- header section starts  -->
+    {% include 'header.html' %}
+    <!-- header section ends -->
+    
+    <section class="books">
+        <h1>{{ category }} Books</h1>
+
+        <div class="container">
+            {% if books %}
+                <div class="book-grid">
+                    {% for book in books %}
+                        <div class="book-card">
+                            <div class="img-container">
+                                <img src="{{ url_for('static', filename='image/books/' + book.image) }}" alt="{{ book.title }}" class="card-img-top">
+                                {% if book.bookStatus == 'rental' %}
+                                <span class="badge new-book">Rental Book</span>
+                                {% elif book.bookStatus == 'new' %}
+                                <span class="badge new-book">New Book</span>
+                                {% elif book.bookStatus == 'second' %}
+                                <span class="badge old-book">Second Hand</span>
+                                {% else %}
+                                <span class="badge old-book">Unknown</span>
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ book.title }}</h5>
+                                <p class="card-text price">Price: ₹{{ book.price }}</p>
+                                <a href="/book/{{ book.id }}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No books found in this category.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- footer section starts  -->
+    {% include 'footer.html' %}
+    <!-- footer section ends -->
+
+    <!-- loader  -->
+
+    <div class="loader-container">
+        <img src="{{ url_for('static', filename='image/loader-img.gif') }}" alt="">
+    </div>
+
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+    <!-- custom js file link  -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
